@@ -11,7 +11,8 @@ All commands run on the server (`ssh minim1`) from `~/qura-server/repos/qura-kb/
 | Service logs | `source scripts/lib.sh; compose logs -f --tail 100 crm-server` |
 | Deploy history | `tail -50 ~/qura-server/logs/deploy.log` |
 | Boot / backup logs | `~/qura-server/logs/{boot,backup}.log` |
-| SQL shell | `compose exec postgres psql -U postgres -d qura_crm` |
+| SQL shell | `compose exec postgres psql -U postgres -d qura_main` (tables are `client.*` and `crm.*`) |
+| End-to-end check | `python3 infra/tests/e2e_policy_flow.py --client … --crm … --crm-email qa-bot@qurainsure.com --crm-password <env/qa.env> --pdf x.pdf` (26 checks; creates throwaway `e2e-*@example.com` clients) |
 | From the laptop | `ssh -L 5432:127.0.0.1:5432 minim1` then any SQL client on `localhost:5432` |
 
 ## Act

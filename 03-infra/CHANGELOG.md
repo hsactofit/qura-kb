@@ -16,3 +16,9 @@ Newest first. One line per change: date — server/scope — what — who.
   folders; Qura-crm-kb content imported.
 - Fixes found during setup: the client-server repo Dockerfile omits `alembic/` (the infra Dockerfile includes it);
   an empty `QURA_CORS_ALLOW_ORIGINS=` crashes settings parsing (it is now left unset).
+- 2026-10-23 — **Shared database** `qura_main` (schemas `client`, `crm`) replaces per-service DBs (ADR-002); `postgres/shared-db.sql`, `scripts/db-setup.sh`, `ensure_db_setup` in `apply_stack`.
+- 2026-10-23 — `env/shared.env` (`QURA_INTERNAL_TOKEN`) + `__SHARED_*__` template placeholders; CRM gets `crm_storage` volume and read-only `client_storage`.
+- 2026-10-23 — Backups dump each database once (both services list `qura_main`); `restore.sh qura_main` keeps schema owners and re-applies grants. Verified round trip on hs-minim1.
+- 2026-10-23 — CRM image: `/data/storage` owned by `node` (local document storage was not writable).
+- 2026-10-23 — Tunnel hostnames: `quraapi.leadrizz.com` (client-server), `quracrmapi.leadrizz.com` (crm-server).
+- 2026-10-23 — `infra/tests/e2e_policy_flow.py` (26 checks) + QA bot manager `qa-bot@qurainsure.com` (password in `env/qa.env`).

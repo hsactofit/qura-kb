@@ -5,9 +5,11 @@
 | Repo | `hsactofit/Qura-crm-server` → branch `main` (auto-deploy) |
 | Runs on | `hs-minim1`, compose service `crm-server`, container port 4000 |
 | Image | `qura/crm-server:<commit-sha-12>`, built from `infra/docker/crm-server.Dockerfile` (rebuilds `dist/` from source) |
-| Public URL | `https://crm-api.<domain>` via Cloudflare Tunnel |
+| Public URL | `https://quracrmapi.leadrizz.com` via Cloudflare Tunnel |
 | Health | `GET /health` |
-| Database | `qura_crm` (role `qura_crm`) on the shared Postgres. Previously on Aiven (see `05-migrations/`) |
+| Database | `qura_main`, schema `crm` (role `qura_crm`); reads schema `client`. See [ADR-002](../../06-decisions/ADR-002-one-database-shared-by-portal-and-crm.md). Previously on Aiven (see `05-migrations/`) |
+| Documents | R2 when `R2_*` set, else volume `qura_crm_storage`; portal files read in place from `qura_client_storage` (read-only) |
+| Portal sync | every `CLIENT_SYNC_INTERVAL_SECONDS` (10); token `INTERNAL_API_TOKEN` (= shared `QURA_INTERNAL_TOKEN`) |
 | Schema sync | `prisma db push` on start. Destructive changes are refused, so the container fails health and the deploy rolls back |
 | File storage | Cloudflare R2 (`R2_*` env). Uploads are disabled until real R2 keys are set |
 | Secrets | `~/qura-server/env/crm-server.env` (template `infra/env/crm-server.env.example`) |
@@ -17,7 +19,7 @@
 ## How the frontend reaches it
 
 `Qura-crrm-panel/src/proxy.ts` rewrites `/api/v1/*` to `API_URL` and turns the HttpOnly
-`token` cookie into a bearer header. On Vercel, set **`API_URL=https://crm-api.<domain>`**.
+`token` cookie into a bearer header. On Vercel, set **`API_URL=https://quracrmapi.leadrizz.com`**.
 No CORS is needed because the browser only talks to the panel's own origin.
 
 ## Notes / known gaps
@@ -28,4 +30,4 @@ No CORS is needed because the browser only talks to the panel's own origin.
   Never run it against production data. Create real users through the admin UI or SQL instead.
 - `db push` keeps no migration history. Moving to `prisma migrate` is tracked as an infra gap.
 - Smartflo click-to-call is inactive until `SMARTFLO_*` is set. Webhook URL:
-  `https://crm-api.<domain>/api/v1/integrations/smartflo/webhooks`.
+  `https://quracrmapi.leadrizz.com/api/v1/integrations/smartflo/webhooks`.

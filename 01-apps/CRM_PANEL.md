@@ -29,4 +29,13 @@ lead-linked policy PDF upload, lead details.
 ## Known gaps
 
 - No tests.
-- Moving to Vercel needs `API_URL=https://crm-api.<domain>` on the Vercel project.
+- Moving to Vercel needs `API_URL=https://quracrmapi.leadrizz.com` on the Vercel project.
+
+## Sales / ops features (2026-10-23, branch `feat/unified-policy-sync`)
+
+- **Client Portal Inbox** (`/dashboard/portal`): policies to verify, client requests with conversation, reply / reply & resolve, sync now.
+- Verify page: portal badge, editable client-facing summary, AI reading preview; *Verify & Notify Client*.
+- Policy repository: PORTAL / UNVERIFIED badges, **Policy 360** modal (AI reading, docs, opportunities, claims).
+- Accounts: portal badge + live portal identity (email, joined, policies, open requests).
+- My Day: portal tasks link to the inbox; completing one sends the note to the client.
+- Portal sign-ups arrive as leads auto-assigned to the least-loaded agent with a welcome-call task; renewal requests open RENEWAL opportunities; portal claims arrive with documents and an urgent task.

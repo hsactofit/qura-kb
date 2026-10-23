@@ -76,6 +76,18 @@ runnable_services() {
 
 # Brings every runnable service up without building or touching the others.
 apply_stack() {
+  compose up -d --no-build --no-deps postgres || return 1
+  ensure_db_setup || return 1
   # shellcheck disable=SC2046
   compose up -d --no-build --no-deps --remove-orphans $(runnable_services)
+}
+
+# Re-applies postgres/shared-db.sql whenever its content changes (marker = file hash).
+ensure_db_setup() {
+  local sum marker
+  sum="$(shasum "$QURA_INFRA/postgres/shared-db.sql" | cut -c1-12)"
+  marker="$QURA_ROOT/state/db-setup.$sum"
+  [ -f "$marker" ] && return 0
+  "$QURA_INFRA/scripts/db-setup.sh" || return 1
+  mkdir -p "$QURA_ROOT/state"; find "$QURA_ROOT/state" -name "db-setup.*" -delete; touch "$marker"
 }

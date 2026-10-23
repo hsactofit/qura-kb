@@ -17,6 +17,8 @@ RUN npm ci --include=dev --ignore-scripts --no-audit --no-fund
 COPY . .
 RUN rm -rf dist && npx prisma generate && npx tsc
 
+# Document volume (used when R2 is not configured) must be writable by the app user.
+RUN mkdir -p /data/storage && chown -R node:node /data/storage
 USER node
 EXPOSE 4000
 

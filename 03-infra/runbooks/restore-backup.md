@@ -15,7 +15,7 @@ Backups live on the server in `~/qura-server/backups/`:
 ssh minim1
 cd ~/qura-server/repos/qura-kb/infra
 ls -lt ~/qura-server/backups/predeploy ~/qura-server/backups/daily | head
-scripts/restore.sh qura_crm ~/qura-server/backups/daily/qura_crm-20261024-023000.dump
+scripts/restore.sh qura_main ~/qura-server/backups/daily/qura_main-20261024-023000.dump
 ```
 
 `restore.sh` asks you to type the DB name, takes a safety dump of the current

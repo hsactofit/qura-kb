@@ -27,6 +27,6 @@ See `runbooks/restore-backup.md`. **Test a restore monthly** into a scratch DB:
 
 ```bash
 compose exec -T postgres createdb -U postgres restore_test
-compose exec -T postgres pg_restore -U postgres -d restore_test --no-owner < backups/daily/qura_crm-<stamp>.dump
+compose exec -T postgres pg_restore -U postgres -d restore_test < backups/daily/qura_main-<stamp>.dump
 compose exec -T postgres dropdb -U postgres restore_test
 ```

@@ -111,3 +111,14 @@ The repo README still describes the app as a frontend-only demo with fictional
 session data; the code has since been wired to the real backend behind the
 `VITE_DEMO_MODE` toggle. The README is therefore stale relative to the Phase 5 /
 integration commits — flagged in `BLOCKERS_AND_RISKS.md`.
+
+## Policyholder features (2026-10-23, branch `feat/unified-policy-sync`)
+
+- Open sign-up (mobile optional, used to match the CRM customer).
+- Upload a policy: AI reads it (plan, members, vehicle, benefits, exclusions, waiting periods, claim help, summary); badge *Under review* → *Verified by Qura*.
+- Policies added by the advisor appear automatically (*Added by your advisor*) and download.
+- Policy details in plain language; renewal countdown; requests to the advisor: renewal options, call back, question, claim help.
+- File a claim with documents; status timeline from the claims desk.
+- Dashboard: needs-attention (renewals ≤60 days, reviews, open requests), advisor card, cover gaps → talk to advisor.
+- Support shows advisor replies by name; notifications for verification, new policies, replies, claim updates.
+- Vercel: `vercel.json` rewrites `/api/client/*` → `https://quraapi.leadrizz.com`.

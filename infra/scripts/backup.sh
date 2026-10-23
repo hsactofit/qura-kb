@@ -36,7 +36,11 @@ if [ "$kind" = "predeploy" ]; then
   exit $rc
 fi
 
+seen=" "
 while IFS='|' read -r -u 3 _ _ _ db; do
+  # Several services can share one database (qura_main); dump it once.
+  case "$seen" in *" $db "*) continue ;; esac
+  seen="$seen$db "
   [ "$db" != "-" ] && { dump_db "$db" || rc=1; }
 done 3< <(services)
 compose exec -T postgres pg_dumpall -U postgres --globals-only > "$dir/globals-$stamp.sql" || rc=1

@@ -12,8 +12,8 @@
 
 | Hostname | → | Service |
 |---|---|---|
-| `client-api.<domain>` | | `client-server:8787` |
-| `crm-api.<domain>` | | `crm-server:4000` |
+| `quraapi.leadrizz.com` | | `client-server:8787` |
+| `quracrmapi.leadrizz.com` | | `crm-server:4000` |
 
 Anything not listed returns 404 at the tunnel.
 

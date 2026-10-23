@@ -8,8 +8,10 @@ It also holds `infra/`, the code that runs the servers.
 
 | Product | Frontend | Backend | Runs on |
 |---|---|---|---|
-| **Client portal** (customers) | `Qura-client-panel` (React/Vite) | `qura-client-server` (FastAPI) | Vercel + hs-minim1 |
-| **CRM** (internal agents/managers) | `Qura-crrm-panel` (Next.js) | `Qura-crm-server` (Express/Prisma) | Vercel + hs-minim1 (moving off Render/Aiven) |
+| **Client portal** (customers) | `Qura-client-panel` (React/Vite) | `qura-client-server` (FastAPI) → `quraapi.leadrizz.com` | Vercel + hs-minim1 |
+| **CRM** (internal agents/managers) | `Qura-crrm-panel` (Next.js) | `Qura-crm-server` (Express/Prisma) → `quracrmapi.leadrizz.com` | Vercel + hs-minim1 (moving off Render/Aiven) |
+
+Both backends share one database, `qura_main` (schemas `client` and `crm`); see [ADR-002](06-decisions/ADR-002-one-database-shared-by-portal-and-crm.md).
 | **Marketing site** | `qura-insure-site` (Next.js) | — | TBD |
 
 ## Map
@@ -18,7 +20,7 @@ It also holds `infra/`, the code that runs the servers.
 |---|---|
 | [00-overview/](00-overview/) | [PROJECT_GIST](00-overview/PROJECT_GIST.md) (start here), [STATUS_RULES](00-overview/STATUS_RULES.md) (status values and verification levels L0–L3) |
 | [01-apps/](01-apps/) | One page per repo: [client-server](01-apps/CLIENT_SERVER.md), [client-panel](01-apps/CLIENT_PANEL.md), [crm-server](01-apps/CRM_SERVER.md), [crm-panel](01-apps/CRM_PANEL.md), [insure-site](01-apps/INSURE_SITE.md), [qura-kb](01-apps/QURA_KB.md) |
-| [02-architecture/](02-architecture/) | [Ecosystem overview](02-architecture/ARCHITECTURE_OVERVIEW.md); [crm/](02-architecture/crm/) (CRM architecture, DB schema, API contracts) |
+| [02-architecture/](02-architecture/) | [Ecosystem overview](02-architecture/ARCHITECTURE_OVERVIEW.md); [Portal ↔ CRM sync](02-architecture/PORTAL_CRM_SYNC.md) (one DB, what flows where); [crm/](02-architecture/crm/) (CRM architecture, DB schema, API contracts) |
 | [03-infra/](03-infra/) | Servers, services, deploy pipeline, backups, runbooks, changelog. **[Start at 03-infra/README](03-infra/README.md)** |
 | [04-tracking/](04-tracking/) | [Issue register](04-tracking/ISSUE_REGISTER.md), [roadmap](04-tracking/ROADMAP.md), [completion log](04-tracking/COMPLETION_LOG.md), [blockers and risks](04-tracking/BLOCKERS_AND_RISKS.md), [CRM task tracker](04-tracking/CRM_TASK_TRACKER.md) |
 | [05-migrations/](05-migrations/) | Planned and in-flight moves (hosting, DBs, data) |

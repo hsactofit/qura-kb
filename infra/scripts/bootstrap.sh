@@ -44,11 +44,12 @@ render_env() {
   local name="$1" src="$QURA_INFRA/env/$1.env.example" dst="$QURA_ROOT/env/$1.env"
   [ -f "$dst" ] && { echo "keep  env/$name.env"; return; }
   [ -f "$src" ] || { echo "no template for $name"; return; }
-  ( set -a; source "$QURA_ROOT/env/postgres.env" 2>/dev/null || true; set +a
-    perl -pe 'BEGIN{open R,"<","/dev/urandom"} s/__SECRET__/read(R,$b,24);unpack("H*",$b)/ge; s/__PG_(\w+)__/$ENV{$1}/g' "$src" ) > "$dst"
+  ( set -a; for f in postgres shared; do source "$QURA_ROOT/env/$f.env" 2>/dev/null || true; done; set +a
+    perl -pe 'BEGIN{open R,"<","/dev/urandom"} s/__SECRET__/read(R,$b,24);unpack("H*",$b)/ge; s/__(?:PG|SHARED)_(\w+)__/$ENV{$1}/g' "$src" ) > "$dst"
   chmod 600 "$dst"; echo "new   env/$name.env"
 }
 render_env postgres
+render_env shared
 while IFS='|' read -r -u 3 name _; do render_env "$name"; done 3< <(services)
 
 step "4/7 GitHub deploy keys (read-only, one per repo)"
@@ -80,6 +81,7 @@ set_var QURA_INFRA "$QURA_INFRA"
 step "6/7 container runtime"
 ensure_docker && docker info --format 'docker {{.ServerVersion}} on {{.OperatingSystem}}, {{.NCPU}} cpu, {{.MemTotal}} bytes'
 compose up -d postgres
+ensure_db_setup
 
 step "7/7 service units (boot, deploy every 60s, backup 02:30)"
 if is_macos; then

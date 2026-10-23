@@ -5,9 +5,10 @@
 | Repo | `hsactofit/qura-client-server` → branch `main` (auto-deploy) |
 | Runs on | `hs-minim1`, compose service `client-server`, container port 8787 |
 | Image | `qura/client-server:<commit-sha-12>`, built from `infra/docker/client-server.Dockerfile` |
-| Public URL | `https://client-api.<domain>` via Cloudflare Tunnel (see `cloudflare-tunnel.md`) |
+| Public URL | `https://quraapi.leadrizz.com` via Cloudflare Tunnel (see `cloudflare-tunnel.md`) |
 | Health | `GET /api/client/health` (liveness), `GET /api/client/health/ready` (DB check; used by Docker) |
-| Database | `qura_client` (role `qura_client`) on the shared Postgres |
+| Database | `qura_main`, schema `client` (role `qura_client`, Alembic); reads schema `crm`. See [ADR-002](../../06-decisions/ADR-002-one-database-shared-by-portal-and-crm.md) |
+| CRM sync | every `QURA_CRM_SYNC_INTERVAL_SECONDS` (10); `QURA_CRM_INTERNAL_URL` (compose) + `QURA_INTERNAL_TOKEN` |
 | Migrations | `alembic upgrade head` runs on every container start (after a pre-deploy dump) |
 | File storage | Docker volume `qura_client_storage` → `/data/storage` (nightly tar backup) |
 | Secrets | `~/qura-server/env/client-server.env` (template `infra/env/client-server.env.example`) |
@@ -17,13 +18,13 @@
 ## How the frontend reaches it (important)
 
 The SPA relies on a SameSite=Lax session cookie, a **JS-readable CSRF cookie** and a
-CSP of `connect-src 'self'`. A cross-origin call straight to `client-api.<domain>` would break
+CSP of `connect-src 'self'`. A cross-origin call straight to `quraapi.leadrizz.com` would break
 all three. So the SPA must call **its own origin**, and Vercel proxies the call:
 
 `Qura-client-panel/vercel.json`, before the SPA catch-all:
 
 ```json
-{ "source": "/api/client/:path*", "destination": "https://client-api.<domain>/api/client/:path*" }
+{ "source": "/api/client/:path*", "destination": "https://quraapi.leadrizz.com/api/client/:path*" }
 ```
 
 and Vercel env `VITE_API_BASE_URL=/api/client`, `VITE_DEMO_MODE=false`.

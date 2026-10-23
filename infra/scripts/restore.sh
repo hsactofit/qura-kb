@@ -26,6 +26,12 @@ while IFS='|' read -r -u 3 name _ _ sdb; do [ "$sdb" = "$db" ] && users+=("$name
 owner="$(compose exec -T postgres psql -U postgres -tAc "SELECT pg_get_userbyid(datdba) FROM pg_database WHERE datname='$db'")"
 compose exec -T postgres psql -U postgres -v ON_ERROR_STOP=1 \
   -c "DROP DATABASE IF EXISTS $db WITH (FORCE);" -c "CREATE DATABASE $db OWNER ${owner:-postgres};"
-compose exec -T postgres pg_restore -U postgres -d "$db" --no-owner --role="${owner:-postgres}" < "$file"
+if [ "$db" = "qura_main" ]; then
+  # Shared database: keep each schema's owner (qura_client / qura_crm) and re-apply grants.
+  compose exec -T postgres pg_restore -U postgres -d "$db" < "$file"
+  "$QURA_INFRA/scripts/db-setup.sh"
+else
+  compose exec -T postgres pg_restore -U postgres -d "$db" --no-owner --role="${owner:-postgres}" < "$file"
+fi
 [ ${#users[@]} -gt 0 ] && compose up -d --no-build --no-deps "${users[@]}"
 log "restored $db from $(basename "$file")"

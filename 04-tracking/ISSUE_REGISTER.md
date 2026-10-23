@@ -78,7 +78,7 @@ Server and pipeline details are in `03-infra/`. Migration steps are in `05-migra
 | INFRA-2 | CD | Auto-deploy on push to `main`: add the 3 read-only deploy keys on GitHub | Blocked (human) | High | Himanshu | Keys printed by bootstrap; deployer logs `clone failed` until added |
 | INFRA-3 | Ingress | Cloudflare tunnel login + hostnames (`client-api`, `crm-api`) | Blocked (human) | High | Himanshu | `tunnel-setup.sh`; domain to confirm |
 | INFRA-4 | Frontend | Client-panel `vercel.json` rewrite `/api/client/*` → tunnel; Vercel env | Open | High | TBD | Required by cookie, CSRF and CSP design; see `03-infra/services/client-server.md` |
-| INFRA-5 | Frontend | Move CRM panel Render → Vercel, `API_URL=https://crm-api.<domain>` | Open | High | TBD | |
+| INFRA-5 | Frontend | Move CRM panel Render → Vercel, `API_URL=https://quracrmapi.leadrizz.com` | Open | High | TBD | |
 | INFRA-6 | Data | Decide on and run the CRM data copy from Aiven `defaultdb` → `qura_crm` | Open (decision) | High | Himanshu | Demo data or real? |
 | INFRA-7 | Backups | Off-site backup copy (rclone → R2) | Open | High | TBD | `backup.sh` supports `BACKUP_RCLONE_REMOTE` |
 | INFRA-8 | Alerts | Deploy failure / service-down notifications (Slack or e-mail) | Backlog | Medium | TBD | |
@@ -91,3 +91,19 @@ Server and pipeline details are in `03-infra/`. Migration steps are in `05-migra
 **CS-9 update (2026-10-23)**: `alembic upgrade head` (0001→0003) ran successfully against a live
 Postgres 16 `qura_client` on hs-minim1, and `/health/ready` reports DB `connected`. That is L2 for
 schema apply. Constraint and JSONB behaviour under real API traffic is still part of X-1.
+
+### 2026-10-23 — Unified policy platform (portal ↔ CRM)
+
+| ID | Area | Item | Status | Priority | Owner | Notes |
+|---|---|---|---|---|---|---|
+| X-2 | Product | One DB for portal + CRM, state-based sync both ways (sign-ups, uploads, verification, requests, replies, claims) | Done (L3 e2e on hs-minim1) | High | Claude | [PORTAL_CRM_SYNC](../02-architecture/PORTAL_CRM_SYNC.md) |
+| CP-10 | Client panel | Open sign-up, AI policy view, verification badges, renewal/callback/question/claim-help requests, claim filing + timeline, advisor card, needs-attention dashboard; removed fake renew/nominee/schedule actions | Done (browser e2e) | High | Claude | branch `feat/unified-policy-sync` |
+| CRM-20 | CRM panel | Portal Inbox, portal-aware verify with client summary, Policy 360, portal badges, My Day reply link | Done (browser e2e) | High | Claude | branch `feat/unified-policy-sync` |
+| CS-10 | Client server | Migration 0004, open sign-up, rich extraction, CRM sync, POST /claims, /policies/{id}/request | Done (175 tests + e2e) | High | Claude | |
+| CRM-21 | CRM server | Portal sync, /portal API, local document storage, internal doc endpoint, rich extraction | Done (e2e) | High | Claude | |
+| INFRA-14 | Infra | Push the four `feat/unified-policy-sync` branches + qura-kb to `main` (otherwise the deployer will redeploy old `main` once deploy keys exist) | Open | **Urgent** | Himanshu | needs approval |
+| INFRA-15 | Data | Aiven CRM data → `qura_main.crm` (needs the Aiven connection string) | Open | High | Himanshu | |
+| INFRA-16 | Infra | Drop legacy `qura_client` / `qura_crm` DBs on hs-minim1 (test data only) | Open | Low | | |
+| INFRA-17 | Frontend | Vercel connector is account "Ecode Dash" (GitHub Eecodedash6) with no projects/no access to hsactofit repos | Open | High | Himanshu | connect the right Vercel account or grant access |
+| INFRA-18 | Secrets | Fill `QURA_OPENAI_API_KEY` (client) and `OPENAI_API_KEY`, `R2_*`, `SMARTFLO_*` (CRM) on hs-minim1 | Open | High | Himanshu | placeholders in `~/qura-server/env/` |
+| X-3 | Product | No email/SMS yet: clients learn about replies via portal notifications only | Open | Medium | | |
