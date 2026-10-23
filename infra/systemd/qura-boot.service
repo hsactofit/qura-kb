@@ -1,0 +1,13 @@
+[Unit]
+Description=Qura stack (start containers at boot)
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=__USER__
+Environment=HOME=__HOME__ QURA_ROOT=__QURA_ROOT__
+ExecStart=/bin/bash __QURA_INFRA__/scripts/boot.sh
+
+[Install]
+WantedBy=multi-user.target

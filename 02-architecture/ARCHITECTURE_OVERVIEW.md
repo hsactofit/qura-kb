@@ -79,7 +79,7 @@ has its own configuration, database and secrets.
 ecosystem. Its current, agreed scope is architecture definition and project
 tracking (this documentation set). Implementing insurance knowledge features is
 explicitly deferred. There is no runtime integration between `qura-kb` and the
-portal yet; see `docs/repositories/QURA_KB.md` and `ROADMAP.md`.
+portal yet; see `01-apps/QURA_KB.md` and `ROADMAP.md`.
 
 ## Cross-repository dependencies (summary)
 

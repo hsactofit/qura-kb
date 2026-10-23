@@ -2,7 +2,7 @@
 
 Verified completed work with actual (evidence-backed) completion dates. A commit
 alone is not treated as completion; each entry records the highest verification
-level reached (see `docs/STATUS_RULES.md`). Target/planned dates live in
+level reached (see `00-overview/STATUS_RULES.md`). Target/planned dates live in
 `ROADMAP.md`, not here.
 
 Last verified: 2026-10-20

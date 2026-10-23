@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Every 60 s: auto-deploy new commits on main, self-update infra, heal containers. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.qura.deploy</string>
+  <key>UserName</key><string>__USER__</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/bash</string><string>__QURA_INFRA__/scripts/deploy.sh</string></array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key><string>__HOME__</string>
+    <key>QURA_ROOT</key><string>__QURA_ROOT__</string>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>StartInterval</key><integer>60</integer>
+  <key>AbandonProcessGroup</key><true/>
+  <key>StandardOutPath</key><string>/dev/null</string>
+  <key>StandardErrorPath</key><string>__QURA_ROOT__/logs/launchd-deploy.err</string>
+</dict>
+</plist>

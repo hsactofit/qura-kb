@@ -5,10 +5,10 @@ the single entry point; details live in the linked documents.
 
 Last verified: 2026-10-20
 
-Related docs: [ARCHITECTURE_OVERVIEW](ARCHITECTURE_OVERVIEW.md) ·
-[ISSUE_REGISTER](ISSUE_REGISTER.md) · [ROADMAP](ROADMAP.md) ·
-[COMPLETION_LOG](COMPLETION_LOG.md) · [BLOCKERS_AND_RISKS](BLOCKERS_AND_RISKS.md) ·
-[STATUS_RULES](docs/STATUS_RULES.md)
+Related docs: [ARCHITECTURE_OVERVIEW](../02-architecture/ARCHITECTURE_OVERVIEW.md) ·
+[ISSUE_REGISTER](../04-tracking/ISSUE_REGISTER.md) · [ROADMAP](../04-tracking/ROADMAP.md) ·
+[COMPLETION_LOG](../04-tracking/COMPLETION_LOG.md) · [BLOCKERS_AND_RISKS](../04-tracking/BLOCKERS_AND_RISKS.md) ·
+[STATUS_RULES](STATUS_RULES.md)
 
 ---
 
@@ -60,7 +60,7 @@ integration and acceptance are still unproven, and all forward dates are TBD.**
 
 ## Repository-by-repository status
 
-### qura-client-server (backend) — see [docs/repositories/CLIENT_SERVER.md](docs/repositories/CLIENT_SERVER.md)
+### qura-client-server (backend) — see [01-apps/CLIENT_SERVER.md](../01-apps/CLIENT_SERVER.md)
 
 - **Purpose**: dedicated client-portal API (`/api/client`, `{success,message,data}`
   envelope). Independent of `arham-secure-server`; connects only to a `qura_*` DB.
@@ -82,7 +82,7 @@ integration and acceptance are still unproven, and all forward dates are TBD.**
 - **Next actions**: migrate + verify a live `qura_*` DB; add avatar/KYC/RM tests;
   exercise real extraction; begin deferred features by agreed priority.
 
-### Qura-client-panel (frontend) — see [docs/repositories/CLIENT_PANEL.md](docs/repositories/CLIENT_PANEL.md)
+### Qura-client-panel (frontend) — see [01-apps/CLIENT_PANEL.md](../01-apps/CLIENT_PANEL.md)
 
 - **Purpose**: the client-portal SPA (dashboard, policies, claims, support,
   notifications, transactions, profile, settings, FAQs, marketplace, admin).
@@ -103,7 +103,7 @@ integration and acceptance are still unproven, and all forward dates are TBD.**
 - **Dependencies**: backend `/api/client` contract; live e2e needs the backend + DB.
 - **Next actions**: run against live backend + DB; reconcile routes; resolve stubs.
 
-### qura-kb (knowledge base + tracking) — see [docs/repositories/QURA_KB.md](docs/repositories/QURA_KB.md)
+### qura-kb (knowledge base + tracking) — see [01-apps/QURA_KB.md](../01-apps/QURA_KB.md)
 
 - **Purpose**: central project tracking (active now) and a future standalone KB
   service (near-term scope = architecture + tracking only; insurance knowledge
@@ -121,4 +121,4 @@ integration and acceptance are still unproven, and all forward dates are TBD.**
 Start here, then open `ISSUE_REGISTER.md` for the itemized status, `ROADMAP.md`
 for sequencing and dependencies, `COMPLETION_LOG.md` for what is genuinely done
 (with verification level), and `BLOCKERS_AND_RISKS.md` for the decisions owed.
-`docs/STATUS_RULES.md` defines every status and verification level used here.
+`00-overview/STATUS_RULES.md` defines every status and verification level used here.

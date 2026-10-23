@@ -1,43 +1,39 @@
-# qura-kb
+# qura-kb — Qura knowledge base
 
-Knowledge-base service for the Qura ecosystem **and** the central
-project-management and documentation hub for all Qura repositories.
+The single source of truth for the whole Qura ecosystem: products, apps, architecture,
+infrastructure, tracking, decisions. It replaces `Qura-crm-kb`, whose content now lives here.
+It also holds `infra/`, the code that runs the servers.
 
-Today this repo's active role is project tracking. The KB *service* is not yet
-built — its scope and stack are still to be decided (see the blockers doc).
+## The ecosystem in one table
 
-## Start here
+| Product | Frontend | Backend | Runs on |
+|---|---|---|---|
+| **Client portal** (customers) | `Qura-client-panel` (React/Vite) | `qura-client-server` (FastAPI) | Vercel + hs-minim1 |
+| **CRM** (internal agents/managers) | `Qura-crrm-panel` (Next.js) | `Qura-crm-server` (Express/Prisma) | Vercel + hs-minim1 (moving off Render/Aiven) |
+| **Marketing site** | `qura-insure-site` (Next.js) | — | TBD |
 
-- **[PROJECT_GIST.md](PROJECT_GIST.md)** — consolidated overview and current
-  status of the whole Qura ecosystem (read this first).
-- **[ISSUE_REGISTER.md](ISSUE_REGISTER.md)** — central issue register (open,
-  in progress, blocked, backlog, completed) across all repos.
-- **[ROADMAP.md](ROADMAP.md)** — milestones, dependencies and target dates.
-- **[COMPLETION_LOG.md](COMPLETION_LOG.md)** — verified completed work with
-  actual completion dates and verification levels.
-- **[BLOCKERS_AND_RISKS.md](BLOCKERS_AND_RISKS.md)** — unresolved blockers, risks
-  and decisions needed from the senior.
-- **[ARCHITECTURE_OVERVIEW.md](ARCHITECTURE_OVERVIEW.md)** — how the projects fit
-  together.
+## Map
 
-## Per-repository status
-
-- **[docs/repositories/CLIENT_SERVER.md](docs/repositories/CLIENT_SERVER.md)** — backend.
-- **[docs/repositories/CLIENT_PANEL.md](docs/repositories/CLIENT_PANEL.md)** — frontend.
-- **[docs/repositories/QURA_KB.md](docs/repositories/QURA_KB.md)** — this KB repo.
+| Folder | What's in it |
+|---|---|
+| [00-overview/](00-overview/) | [PROJECT_GIST](00-overview/PROJECT_GIST.md) (start here), [STATUS_RULES](00-overview/STATUS_RULES.md) (status values and verification levels L0–L3) |
+| [01-apps/](01-apps/) | One page per repo: [client-server](01-apps/CLIENT_SERVER.md), [client-panel](01-apps/CLIENT_PANEL.md), [crm-server](01-apps/CRM_SERVER.md), [crm-panel](01-apps/CRM_PANEL.md), [insure-site](01-apps/INSURE_SITE.md), [qura-kb](01-apps/QURA_KB.md) |
+| [02-architecture/](02-architecture/) | [Ecosystem overview](02-architecture/ARCHITECTURE_OVERVIEW.md); [crm/](02-architecture/crm/) (CRM architecture, DB schema, API contracts) |
+| [03-infra/](03-infra/) | Servers, services, deploy pipeline, backups, runbooks, changelog. **[Start at 03-infra/README](03-infra/README.md)** |
+| [04-tracking/](04-tracking/) | [Issue register](04-tracking/ISSUE_REGISTER.md), [roadmap](04-tracking/ROADMAP.md), [completion log](04-tracking/COMPLETION_LOG.md), [blockers and risks](04-tracking/BLOCKERS_AND_RISKS.md), [CRM task tracker](04-tracking/CRM_TASK_TRACKER.md) |
+| [05-migrations/](05-migrations/) | Planned and in-flight moves (hosting, DBs, data) |
+| [06-decisions/](06-decisions/) | ADRs: why each architecture or infra call was made |
+| [07-design/](07-design/) | [Brand guidelines and design system](07-design/BRAND_GUIDELINES.md) |
+| [08-runbooks/](08-runbooks/) | Product runbooks ([CRM demo walkthrough](08-runbooks/CRM_DEMO_WALKTHROUGH.md)). Infra runbooks are in `03-infra/runbooks/` |
+| [infra/](infra/) | Executable infra: compose, Dockerfiles, scripts, launchd/systemd units, service registry |
 
 ## Conventions
 
-- **[docs/STATUS_RULES.md](docs/STATUS_RULES.md)** defines all status values and
-  the verification levels (L0 code → L1 tests → L2 manual → L3 accepted).
+- Evidence-based entries (git, code, tests, runtime checks). Inferred items are marked **provisional**.
+- No secrets, credentials or customer data, ever. Use env-var **names** only.
+- Tracking IDs: `CS-` client-server, `CP-` client-panel, `CRM-` CRM server/panel, `SITE-` marketing site,
+  `INFRA-` infrastructure, `KB-` this repo, `X-` cross-repo.
+- Infra changes: edit `infra/` and add a line to `03-infra/CHANGELOG.md`. Pushes to `main` are applied to
+  servers automatically.
 
-## Scope and guarantees of this hub
-
-- Covers `qura-client-server`, `Qura-client-panel` and `qura-kb`.
-- `arham-secure-server` is a read-only reference from a prior project and is out
-  of scope for Qura tracking.
-- Entries are evidence-based (git history, source, migrations, test runs, README,
-  or explicit senior statements). Inferred recommendations are marked
-  **provisional**. No secrets, credentials or customer data are stored here.
-
-Last verified: 2026-10-20
+Last verified: 2026-10-23

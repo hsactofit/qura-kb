@@ -1,7 +1,7 @@
 # Qura Ecosystem — Blockers and Risks
 
 Unresolved blockers, risks and decisions the senior needs to make. Status
-vocabulary in `docs/STATUS_RULES.md`.
+vocabulary in `00-overview/STATUS_RULES.md`.
 
 Last verified: 2026-10-20
 

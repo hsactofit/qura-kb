@@ -3,7 +3,7 @@
 Planned work, milestones, dependencies and target dates across the three Qura
 repositories. Target dates are separate from actual completion (see
 `COMPLETION_LOG.md`). Use `TBD` where no date is agreed. Status vocabulary is in
-`docs/STATUS_RULES.md`.
+`00-overview/STATUS_RULES.md`.
 
 Last verified: 2026-10-20
 

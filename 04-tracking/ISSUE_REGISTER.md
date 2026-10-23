@@ -1,7 +1,7 @@
 # Qura Ecosystem — Central Issue Register
 
 Single register for issues across all Qura repositories. Status values and
-verification levels are defined in `docs/STATUS_RULES.md`.
+verification levels are defined in `00-overview/STATUS_RULES.md`.
 
 Last verified: 2026-10-20
 
@@ -67,3 +67,27 @@ Conventions:
 | P-CS-3 | client-server | Tests | Exercise real OpenAI extraction path in a sandbox | provisional | Backlog | Only the degraded/unavailable branch is tested |
 | P-CP-1 | client-panel | Cleanup | Remove or repurpose unused `document.service.ts` | provisional | Backlog | localStorage demo store, no callers |
 | P-CP-2 | client-panel | Data | Decide if nominees need a real backend resource | provisional | Backlog | Currently derived client-side with hardcoded share |
+
+## Infrastructure (added 2026-10-23)
+
+Server and pipeline details are in `03-infra/`. Migration steps are in `05-migrations/2026-10-backends-to-minim1.md`.
+
+| ID | Area | Title | Status | Priority | Owner | Evidence / Notes |
+|---|---|---|---|---|---|---|
+| INFRA-1 | Server | hs-minim1 built: Colima, Postgres 16, both APIs, launchd boot/deploy/backup | Completed (L2) | High | Himanshu (Claude Code) | `03-infra/servers/hs-minim1.md`; boot path and backup/restore verified 2026-10-23 |
+| INFRA-2 | CD | Auto-deploy on push to `main`: add the 3 read-only deploy keys on GitHub | Blocked (human) | High | Himanshu | Keys printed by bootstrap; deployer logs `clone failed` until added |
+| INFRA-3 | Ingress | Cloudflare tunnel login + hostnames (`client-api`, `crm-api`) | Blocked (human) | High | Himanshu | `tunnel-setup.sh`; domain to confirm |
+| INFRA-4 | Frontend | Client-panel `vercel.json` rewrite `/api/client/*` → tunnel; Vercel env | Open | High | TBD | Required by cookie, CSRF and CSP design; see `03-infra/services/client-server.md` |
+| INFRA-5 | Frontend | Move CRM panel Render → Vercel, `API_URL=https://crm-api.<domain>` | Open | High | TBD | |
+| INFRA-6 | Data | Decide on and run the CRM data copy from Aiven `defaultdb` → `qura_crm` | Open (decision) | High | Himanshu | Demo data or real? |
+| INFRA-7 | Backups | Off-site backup copy (rclone → R2) | Open | High | TBD | `backup.sh` supports `BACKUP_RCLONE_REMOTE` |
+| INFRA-8 | Alerts | Deploy failure / service-down notifications (Slack or e-mail) | Backlog | Medium | TBD | |
+| INFRA-9 | CRM | Replace `prisma db push` with `prisma migrate` (history + safe migrations) | Backlog | Medium | TBD | |
+| INFRA-10 | CRM | Remove the hardcoded JWT fallback secret; stop committing `dist/` | Backlog | Medium | TBD | `src/config.ts` |
+| INFRA-11 | Server | Physical reboot test of hs-minim1 | Open | Medium | Himanshu | Daemon boot path already verified without a reboot |
+| INFRA-12 | Access | Confirm access to `hsactofit/Qura-crm-server` (laptop credentials got "Repository not found") | Open | High | Himanshu | |
+| INFRA-13 | Client API | Upstream: the repo `Dockerfile` should copy `alembic/` + `alembic.ini`; an empty `QURA_CORS_ALLOW_ORIGINS` crashes startup | Backlog | Low | TBD | Worked around in `infra/` |
+
+**CS-9 update (2026-10-23)**: `alembic upgrade head` (0001→0003) ran successfully against a live
+Postgres 16 `qura_client` on hs-minim1, and `/health/ready` reports DB `connected`. That is L2 for
+schema apply. Constraint and JSONB behaviour under real API traffic is still part of X-1.
