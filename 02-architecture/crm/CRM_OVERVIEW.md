@@ -43,7 +43,7 @@ Unlike generic contact databases, QURA INSURE CRM treats **Policies**, **Renewal
 | Service | Connection / Credentials Location |
 | :--- | :--- |
 | **PostgreSQL Database** | `referneces/db.txt` (`postgres://avnadmin:***@non-prod-server-actofit-57d1.h.aivencloud.com:15898/defaultdb?sslmode=require`) |
-| **Cloudflare R2 Bucket** | Configured via `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_ENDPOINT`, `R2_BUCKET_NAME` |
+| **Cloudflare R2 Bucket** | Configured via `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_INVOICES_BUCKET_NAME` |
 | **Node API Port** | `http://localhost:4000` (Proxied via Next.js middleware at `/api/v1/*`) |
 | **Next.js Panel Port** | `http://localhost:3000` |
 
