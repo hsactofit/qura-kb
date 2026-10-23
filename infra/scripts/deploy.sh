@@ -33,7 +33,8 @@ main() {
       return 0
     fi
   fi
-  trap 'rm -rf "$lock"' EXIT
+  # Expanded now: the trap runs after main() returns, when the local is gone.
+  trap "rm -rf '$lock'" EXIT
 
   ensure_docker || { log "ERROR docker unavailable"; return 1; }
 
