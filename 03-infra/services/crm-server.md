@@ -10,6 +10,7 @@
 | Database | `qura_main`, schema `crm` (role `qura_crm`); reads schema `client`. See [ADR-002](../../06-decisions/ADR-002-one-database-shared-by-portal-and-crm.md). Previously on Aiven (see `05-migrations/`) |
 | Documents | R2 when `R2_*` set, else volume `qura_crm_storage`; portal files read in place from `qura_client_storage` (read-only) |
 | Portal sync | every `CLIENT_SYNC_INTERVAL_SECONDS` (10); token `INTERNAL_API_TOKEN` (= shared `QURA_INTERNAL_TOKEN`) |
+| Renewal reminders | every `RENEWAL_REMINDER_INTERVAL_MINUTES` (60, 0 = off): one open `RENEWAL_ACTION` task (My Day) + RENEWAL opportunity per policy expiring by end of this month (IST) or within 30 days, or lapsed ≤7 days. Owner: policy owner → account owner → least-loaded agent. Managers: `POST /api/v1/renewals/run-reminders` |
 | Schema sync | `prisma db push` on start. Destructive changes are refused, so the container fails health and the deploy rolls back |
 | File storage | Cloudflare R2 (`R2_*` env). Uploads are disabled until real R2 keys are set |
 | Secrets | `~/qura-server/env/crm-server.env` (template `infra/env/crm-server.env.example`) |
