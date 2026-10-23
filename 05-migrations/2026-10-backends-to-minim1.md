@@ -18,12 +18,10 @@ Status: **In progress** · Decision: [ADR-001](../06-decisions/ADR-001-self-host
 - [x] Server built; both APIs healthy on empty DBs (2026-10-23)
 - [x] Shared `qura_main` + portal↔CRM sync deployed; e2e 26/26 on hs-minim1; backup→restore round trip OK (2026-10-23)
 - [ ] Deploy keys on GitHub → auto-deploy active
-- [ ] Cloudflare tunnel + hostnames
-- [ ] **CRM data**: decide whether to copy Aiven `defaultdb` (demo or real data?) or start clean.
-      Copying: `pg_dump --no-owner --no-acl -Fc -n public "<aiven url>" > aiven.dump`, restore into a scratch DB,
-      `ALTER SCHEMA public RENAME TO crm`, dump that and `pg_restore --clean -n crm` into `qura_main` as `qura_crm`,
-      then `compose restart crm-server` (`db push` adds the new portal columns) and spot-check counts.
-- [ ] Real secrets in env files (R2, OpenAI, Smartflo, CORS)
+- [x] Cloudflare tunnel + hostnames (tunnel `qura-hs-minim1`; both APIs healthy publicly, 2026-10-23)
+- [x] **CRM data**: Aiven `public` copied into `qura_main.crm` (test data in `crm` and `client` cleared first); all 18 table counts match (2026-10-23).
+      Backups: `~/qura-server/backups/manual/` (`qura_main-before-aiven-*`, `aiven-defaultdb-*`). The one Aiven document's file is not in the `qura` R2 bucket.
+- [ ] Real secrets in env files: R2 + OpenAI done 2026-10-23; Smartflo, CORS open
 - [ ] Vercel: client-panel `vercel.json` rewrite + env; CRM panel project + `API_URL`
 - [ ] Smartflo webhook URL → `https://quracrmapi.leadrizz.com/api/v1/integrations/smartflo/webhooks`
 - [ ] Smoke test both portals end-to-end (this is tracking item X-1)

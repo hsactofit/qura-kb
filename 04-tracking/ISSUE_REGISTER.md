@@ -79,7 +79,7 @@ Server and pipeline details are in `03-infra/`. Migration steps are in `05-migra
 | INFRA-3 | Ingress | Cloudflare tunnel login + hostnames (`client-api`, `crm-api`) | Blocked (human) | High | Himanshu | `tunnel-setup.sh`; domain to confirm |
 | INFRA-4 | Frontend | Client-panel `vercel.json` rewrite `/api/client/*` → tunnel; Vercel env | Open | High | TBD | Required by cookie, CSRF and CSP design; see `03-infra/services/client-server.md` |
 | INFRA-5 | Frontend | Move CRM panel Render → Vercel, `API_URL=https://quracrmapi.leadrizz.com` | Open | High | TBD | |
-| INFRA-6 | Data | Decide on and run the CRM data copy from Aiven `defaultdb` → `qura_crm` | Open (decision) | High | Himanshu | Demo data or real? |
+| INFRA-6 | Data | Decide on and run the CRM data copy from Aiven `defaultdb` → `qura_crm` | Done (real data copied, see INFRA-15) | High | Himanshu | Demo data or real? |
 | INFRA-7 | Backups | Off-site backup copy (rclone → R2) | Open | High | TBD | `backup.sh` supports `BACKUP_RCLONE_REMOTE` |
 | INFRA-8 | Alerts | Deploy failure / service-down notifications (Slack or e-mail) | Backlog | Medium | TBD | |
 | INFRA-9 | CRM | Replace `prisma db push` with `prisma migrate` (history + safe migrations) | Backlog | Medium | TBD | |
@@ -102,7 +102,7 @@ schema apply. Constraint and JSONB behaviour under real API traffic is still par
 | CS-10 | Client server | Migration 0004, open sign-up, rich extraction, CRM sync, POST /claims, /policies/{id}/request | Done (175 tests + e2e) | High | Claude | |
 | CRM-21 | CRM server | Portal sync, /portal API, local document storage, internal doc endpoint, rich extraction | Done (e2e) | High | Claude | |
 | INFRA-14 | Infra | Push the four `feat/unified-policy-sync` branches + qura-kb to `main` (otherwise the deployer will redeploy old `main` once deploy keys exist) | Open | **Urgent** | Himanshu | needs approval |
-| INFRA-15 | Data | Aiven CRM data → `qura_main.crm` (needs the Aiven connection string) | Open | High | Himanshu | |
+| INFRA-15 | Data | Aiven CRM data → `qura_main.crm` (needs the Aiven connection string) | Done 2026-10-23 | High | Himanshu | |
 | INFRA-16 | Infra | Drop legacy `qura_client` / `qura_crm` DBs on hs-minim1 (test data only) | Open | Low | | |
 | INFRA-17 | Frontend | Vercel connector is account "Ecode Dash" (GitHub Eecodedash6) with no projects/no access to hsactofit repos | Open | High | Himanshu | connect the right Vercel account or grant access |
 | INFRA-18 | Secrets | Fill `QURA_OPENAI_API_KEY` (client) and `OPENAI_API_KEY`, `R2_*`, `SMARTFLO_*` (CRM) on hs-minim1 | Open | High | Himanshu | placeholders in `~/qura-server/env/` |
