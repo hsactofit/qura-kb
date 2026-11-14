@@ -107,3 +107,11 @@ schema apply. Constraint and JSONB behaviour under real API traffic is still par
 | INFRA-17 | Frontend | Vercel connector is account "Ecode Dash" (GitHub Eecodedash6) with no projects/no access to hsactofit repos | Open | High | Himanshu | connect the right Vercel account or grant access |
 | INFRA-18 | Secrets | Fill `QURA_OPENAI_API_KEY` (client) and `OPENAI_API_KEY`, `R2_*`, `SMARTFLO_*` (CRM) on hs-minim1 | Open | High | Himanshu | placeholders in `~/qura-server/env/` |
 | X-3 | Product | No email/SMS yet: clients learn about replies via portal notifications only | Open | Medium | | |
+
+### 2026-11-14 — Website enquiries → CRM leads
+
+| ID | Area | Item | Status | Priority | Owner | Notes |
+|---|---|---|---|---|---|---|
+| SITE-1 | Site | `#contact` enquiry form (name, mobile, email, plan, note; honeypot, per-IP throttle) → `/api/enquiry` → CRM | Built (L1: build + local smoke) | High | Claude | key in `src/lib/crm/config.server.ts` |
+| CRM-22 | CRM server | `POST /api/v1/public/enquiries` (header `X-Site-Key` = `WEBSITE_LEAD_KEY`): new lead `WEBSITE_INQUIRY` + urgent first-contact task via assignment matrix; repeat enquiry adds a call-back task to the open lead; DNC suppressed | Built (L1: tsc + auth/validation smoke; DB write not yet run) | High | Claude | needs `WEBSITE_LEAD_KEY` on hs-minim1 |
+

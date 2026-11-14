@@ -19,6 +19,14 @@ BrandIdentity, FAQ, CTA, Navbar, Footer.
 The Navbar "Login" links to `https://app.qurainsure.com`. That is presumably the client portal.
 Confirm the domain and that it points at the Vercel client-panel.
 
+## Enquiry form → CRM
+
+The `#contact` section holds `EnquiryForm`. It posts to the site's `/api/enquiry` route, which validates,
+drops honeypot hits, throttles per IP and forwards server-to-server to
+`https://quracrmapi.leadrizz.com/api/v1/public/enquiries` with `X-Site-Key`. The key lives in
+`src/lib/crm/config.server.ts` (env `QURA_CRM_SITE_KEY` overrides) and must equal `WEBSITE_LEAD_KEY` on the CRM.
+Leads show in the CRM with source **Website form** (`WEBSITE_INQUIRY`). See SITE-1 / CRM-22.
+
 ## Gaps
 
 - README is the create-next-app default.
