@@ -25,7 +25,8 @@ The `#contact` section holds `EnquiryForm`. It posts to the site's `/api/enquiry
 drops honeypot hits, throttles per IP and forwards server-to-server to
 `https://quracrmapi.leadrizz.com/api/v1/public/enquiries` with `X-Site-Key`. The key lives in
 `src/lib/crm/config.server.ts` (env `QURA_CRM_SITE_KEY` overrides) and must equal `WEBSITE_LEAD_KEY` on the CRM.
-Leads show in the CRM with source **Website form** (`WEBSITE_INQUIRY`). See SITE-1 / CRM-22.
+Leads show in the CRM with source **Website inquiry** (`WEBSITE_INQUIRY`). Verified live 2026-11-24. See SITE-1 / CRM-22;
+key rotation is SITE-2.
 
 ## Gaps
 

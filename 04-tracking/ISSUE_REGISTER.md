@@ -112,6 +112,7 @@ schema apply. Constraint and JSONB behaviour under real API traffic is still par
 
 | ID | Area | Item | Status | Priority | Owner | Notes |
 |---|---|---|---|---|---|---|
-| SITE-1 | Site | `#contact` enquiry form (name, mobile, email, plan, note; honeypot, per-IP throttle) → `/api/enquiry` → CRM | Built (L1: build + local smoke) | High | Claude | key in `src/lib/crm/config.server.ts` |
-| CRM-22 | CRM server | `POST /api/v1/public/enquiries` (header `X-Site-Key` = `WEBSITE_LEAD_KEY`): new lead `WEBSITE_INQUIRY` + urgent first-contact task via assignment matrix; repeat enquiry adds a call-back task to the open lead; DNC suppressed | Built (L1: tsc + auth/validation smoke; DB write not yet run) | High | Claude | needs `WEBSITE_LEAD_KEY` on hs-minim1 |
+| SITE-1 | Site | `#contact` enquiry form (name, mobile, email, plan, note; honeypot, per-IP throttle) → `/api/enquiry` → CRM | Done (L3: live on qurainsure.com 2026-11-24, test enquiry became a CRM lead) | High | Claude | key in `src/lib/crm/config.server.ts` |
+| CRM-22 | CRM server | `POST /api/v1/public/enquiries` (header `X-Site-Key` = `WEBSITE_LEAD_KEY`): new lead `WEBSITE_INQUIRY` + urgent first-contact task via assignment matrix; repeat enquiry adds a call-back task to the open lead; DNC suppressed | Done (L3: 2026-11-24 live test lead created, source Website inquiry, auto-assigned, follow-up task) | High | Claude | `WEBSITE_LEAD_KEY` set on hs-minim1 and matches the site |
+| SITE-2 | Site | Rotate the site key: it is hard-coded in `config.server.ts` (in git). New key → `WEBSITE_LEAD_KEY` (CRM) + `QURA_CRM_SITE_KEY` (site host), drop the hard-coded fallback | Open | Medium | | change both sides together |
 
