@@ -107,6 +107,7 @@ schema apply. Constraint and JSONB behaviour under real API traffic is still par
 | INFRA-17 | Frontend | Vercel connector is account "Ecode Dash" (GitHub Eecodedash6) with no projects/no access to hsactofit repos | Open | High | Himanshu | connect the right Vercel account or grant access |
 | INFRA-18 | Secrets | Fill `QURA_OPENAI_API_KEY` (client) and `OPENAI_API_KEY`, `R2_*`, `SMARTFLO_*` (CRM) on hs-minim1 | Open | High | Himanshu | placeholders in `~/qura-server/env/` |
 | X-3 | Product | No email/SMS yet: clients learn about replies via portal notifications only | Open | Medium | | |
+| INFRA-19 | Data | Go-live reset: wipe all CRM + portal business data and uploads, deactivate every CRM login, one new Super Admin (`infra/scripts/reset-data.sh <email> "<name>"`, backs up first) | Open (script ready, not run) | High | Himanshu | new leads go to Unassigned until agents + assignment matrix are set again |
 
 ### 2026-11-14 — Website enquiries → CRM leads
 
