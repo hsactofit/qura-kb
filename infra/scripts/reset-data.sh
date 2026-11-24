@@ -7,10 +7,10 @@
 #   1. backs up qura_main + both upload volumes (restore: scripts/restore.sh qura_main <dump>)
 #   2. stops client-server and crm-server so no sync runs mid-wipe
 #   3. in ONE transaction: empties every CRM business table and every client-portal user table,
-#      deactivates every CRM login, clears the assignment matrix, creates/updates the admin
+#      DELETES every CRM login (admins included), clears the assignment matrix, creates the new admin
 #   4. empties the upload volumes, starts the servers, prints row counts
 #
-# Kept: crm.users (deactivated), crm.dispositions, crm.system_settings (minus assignment_matrix),
+# Kept: crm.dispositions, crm.system_settings (minus assignment_matrix),
 #       client.master_data, client.announcements, alembic_version.
 # TRUNCATE is used WITHOUT CASCADE on purpose: if a table not listed here references one that is,
 # Postgres refuses and the whole transaction rolls back, nothing is deleted.
@@ -22,7 +22,7 @@ email="${1:?usage: reset-data.sh <admin-email> \"<Admin Name>\"}"
 name="${2:?usage: reset-data.sh <admin-email> \"<Admin Name>\"}"
 
 echo "This DELETES all leads, customers, policies, claims, tasks, calls, portal users and uploaded files"
-echo "in qura_main, and turns off every CRM login except $email."
+echo "in qura_main, and DELETES every CRM login. Only the new admin $email will exist."
 read -r -p 'Type DELETE ALL QURA DATA to continue: ' confirm
 [ "$confirm" = "DELETE ALL QURA DATA" ] || { echo "Aborted."; exit 1; }
 
@@ -61,13 +61,11 @@ TRUNCATE client.ticket_messages, client.support_tickets, client.claim_documents,
          client.transactions, client.notifications, client.audit_logs, client.stored_files,
          client.password_reset_tokens, client.invites, client.user_settings, client.user_profiles,
          client.users;
-UPDATE crm.users SET is_active = false, updated_at = now();
+DELETE FROM crm.users;
 DELETE FROM crm.system_settings WHERE key = 'assignment_matrix';
+UPDATE crm.system_settings SET updated_by = NULL;
 INSERT INTO crm.users (id, email, name, password_hash, role, is_active, updated_at)
-VALUES (gen_random_uuid(), lower(:'email'), :'name', :'hash', 'SUPER_ADMIN', true, now())
-ON CONFLICT (email) DO UPDATE
-  SET name = EXCLUDED.name, password_hash = EXCLUDED.password_hash,
-      role = 'SUPER_ADMIN', is_active = true, updated_at = now();
+VALUES (gen_random_uuid(), lower(:'email'), :'name', :'hash', 'SUPER_ADMIN', true, now());
 COMMIT;
 SQL
 
@@ -85,5 +83,5 @@ SELECT 'crm.policies', count(*) FROM crm.policies UNION ALL
 SELECT 'client.users', count(*) FROM client.users UNION ALL
 SELECT 'client.policies', count(*) FROM client.policies;"
 compose exec -T postgres psql -U postgres -d qura_main -c \
-  "SELECT email, name, role, is_active FROM crm.users ORDER BY is_active DESC, email;"
+  "SELECT email, name, role, is_active FROM crm.users ORDER BY email;"
 log "done; backups in $bdir (*$stamp*)"
